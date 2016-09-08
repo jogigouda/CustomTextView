@@ -21,7 +21,8 @@ public class ResizeableTextView extends TextView {
     //Variable to manage number of lines after which "View more..." will show
     private int nLines = 2;
     private String stringToShow = " view more...", originalText;
-    private boolean trim = false, original = false;
+    private boolean trim;
+
 
     public ResizeableTextView(Context context) {
         super(context);
@@ -61,10 +62,7 @@ public class ResizeableTextView extends TextView {
     public void setText(CharSequence text, BufferType type) {
         super.setText(text, type);
         //First time when UI shown to user store original string of text in a variable
-        if (!original) {
             originalText = text.toString();
-            original = true;
-        }
     }
 
     @Override
@@ -83,10 +81,12 @@ public class ResizeableTextView extends TextView {
         //Check if number of lines is more then given number of lines
         if (getLineCount() > getnLines() && !trim) {
             int length = getLayout().getLineEnd(getnLines() - 1);
+            String str=originalText;
             String s = originalText.subSequence(0, length - stringToShow.length()).toString();
             Log.d(TAG, "subSequence " + s);
             setText(Html.fromHtml(s + "<font color='#448AFF'>" + stringToShow + "</font>"));
-            invalidate();
+            originalText=str;
         }
+
     }
 }
